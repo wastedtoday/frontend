@@ -1,12 +1,46 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import './index.css';
-
+import './style.css';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider.js'
+import {Route, Router, browserHistory} from 'react-router'
+import {cyan500, grey50, darkBlack} from 'material-ui/styles/colors';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import Paper from 'material-ui/Paper';
+import Header from './Header.js'
+
+import Item from "./Item";
+import Categories from "./Categories";
 injectTapEventPlugin();
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-);
+// This replaces the textColor value on the palette
+// and then update the keys for each component that depends on it.
+// More on Colors: http://www.material-ui.com/#/customization/colors
+const muiTheme = getMuiTheme({
+    palette: {
+        primary1Color: grey50,
+        backgroundColor: cyan500,
+        textColor: darkBlack,
+        alternateTextColor: darkBlack,
+    },
+    appBar: {
+        height: 50,
+    },
+});
+
+document.body.style.backgroundColor = muiTheme.palette.backgroundColor;
+document.body.style.fontWeight = 300;
+
+ReactDOM.render((
+    <MuiThemeProvider muiTheme={muiTheme}>
+        <div className="App">
+            <Header text="This ist the header text"/>
+            <Paper style={{width: '80%', display: 'inline-block'}} zDepth={3}>
+                <Router history={browserHistory}>
+                    <Route path="/" component={Categories} />
+                    <Route path="/item/:itemId" component={Item}/>
+                </Router>
+            </Paper>
+        </div>
+    </MuiThemeProvider>
+), document.getElementById('root'))

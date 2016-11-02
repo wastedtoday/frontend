@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import muiThemeable from 'material-ui/styles/muiThemeable';
+import React  from 'react';
+import './style.css';
 
 const Header = (props) => (
-    <h1 style={{height:'150px', marginTop:'50px', color: 'white'}}>time wasted.today:</h1>
+    <h1 className="header">time wasted.today:</h1>
 );
 
-export default muiThemeable()(Header);
+export default Header;
