@@ -2,7 +2,8 @@ import React from 'react';
 import Items from './Items.js'
 import {Tabs, Tab} from 'material-ui/Tabs';
 
-const Categories = React.createClass({
+
+export default class Categories extends React.Component {
     render() {
         return (
             <Tabs>
@@ -12,9 +13,6 @@ const Categories = React.createClass({
                 <Tab label="Lifestyle">
                     <Items />
                 </Tab>
-            </Tabs>
-        );
+            </Tabs>        );
     }
-});
-
-export default Categories;
+}
