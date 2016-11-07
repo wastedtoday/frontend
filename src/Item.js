@@ -2,19 +2,20 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import {List, ListItem} from 'material-ui/List';
+
 
 export default class Item extends React.Component {
-    state = {
-        open: false,
-    };
 
-    handleOpen = () => {
-        this.setState({open: true});
-    };
+    constructor(props) {
+        super(props);
+        this.state = {item: {comments:[]}};
 
-    handleClose = () => {
-        this.setState({open: false});
-    };
+        fetch('http://wasted.today/server.api/item/' + this.props.params.itemId)
+            .then(result=>result.json())
+            .then(item=>this.setState({item}));
+    }
+
 
     render() {
         const actions = [
@@ -33,16 +34,19 @@ export default class Item extends React.Component {
 
         return (
             <div>
-                <RaisedButton label="Dialog" onTouchTap={this.handleOpen} />
-                <Dialog
-                    title="Dialog With Actions"
-                    actions={actions}
-                    modal={false}
-                    open={this.state.open}
-                    onRequestClose={this.handleClose}
-                >
-                    The actions in this window were passed in as an array of React objects.
-                </Dialog>
+                <h1>{this.state.item.name}</h1>
+                <h1>wasted: {this.state.item.name}</h1>
+
+                <List>
+                    {
+                        this.state.item.comments.map(comment=>
+                        <ListItem key={comment.id}
+                          primaryText={comment.username}
+                          secondaryText={comment.text}
+                        />
+                    )}
+                </List>
+
             </div>
         );
     }
