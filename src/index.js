@@ -8,6 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Paper from 'material-ui/Paper';
 import Header from './Header.js'
+import Autocomplete from './Autocomplete.js'
 
 import Item from "./Item";
 import Categories from "./Categories";
@@ -29,12 +30,12 @@ const muiTheme = getMuiTheme({
 });
 
 document.body.style.backgroundColor = muiTheme.palette.backgroundColor;
-document.body.style.fontWeight = 300;
 
 ReactDOM.render((
     <MuiThemeProvider muiTheme={muiTheme}>
         <div className="App">
-            <Header text="This ist the header text"/>
+            <Header />
+            <Autocomplete />
             <Paper style={{width: '80%', display: 'inline-block'}} zDepth={3}>
                 <Router history={browserHistory}>
                     <Route path="/" component={Categories} />
@@ -43,4 +44,4 @@ ReactDOM.render((
             </Paper>
         </div>
     </MuiThemeProvider>
-), document.getElementById('root'))
+), document.getElementById('root'));
