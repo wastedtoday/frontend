@@ -35,13 +35,16 @@ class Items extends Component {
     this.state = {
 			hours: 1,
       dataSource: [],
-      items: []
+      items: [],
+      writeOnly: []
 		};
   }
 
   componentDidMount () {
-    const ref = firebase.database().ref("items");
-    this.bindAsArray(ref, 'items')
+	  const ref = firebase.database().ref("items");
+	  this.bindAsArray(ref, 'items')
+
+	  this.bindAsArray(firebase.database().ref("writeOnly"), 'writeOnly')
     /*
     this.firebaseRefs['items'].push({
       test: "test"
@@ -77,11 +80,10 @@ class Items extends Component {
   };
 
   submitForm() {
-    this.firebaseRefs['items'].push({
+    this.firebaseRefs['writeOnly'].push({
       hours: this.state.hours,
       thing: this.state.thing,
-      description: "",
-      timestamp: new Date()
+      description: ""
     });
   }
 
