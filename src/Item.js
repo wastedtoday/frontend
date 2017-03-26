@@ -1,70 +1,89 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
-
-import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
+import TextField from 'material-ui/TextField';
 
 import firebase from 'firebase'
 import ReactFireMixin from 'reactfire'
 import reactMixin from 'react-mixin'
 
+const buttonStyle = {
+  margin: 12,
+};
+
 class Item extends Component {
 
-  constructor (props, context) {
-    super(props, context)
-    this.state = {
-      items: []
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+          currentName: '',
+          currentComment: '',
+          comments: []
+        }
     }
-  }
 
-  componentDidMount () {
-    const ref = firebase.database().ref("items");
-    this.bindAsArray(ref, 'items')
-    /*
-    this.firebaseRefs['items'].push({
-      test: "test"
-    });
-    */
-  }
+    handleUpdateInput(name) {
+      return function(event, newValue) {
+        if (name === 'name') {
+          this.setState({
+            currentName: newValue
+          });
+        }
+        if (name === 'comment') {
+          this.setState({
+            currentComment: newValue
+          });
+        }
+      }
+    }
 
-  render() {
-    const actions = [
-        <FlatButton
-            label="Cancel"
-            primary={true}
-            onTouchTap={this.handleClose}
-        />,
-        <FlatButton
-            label="Submit"
-            primary={true}
-            keyboardFocused={true}
-            onTouchTap={this.handleClose}
-        />,
-    ];
+    componentDidMount () {
+      const ref = firebase.database().ref("comments").child(this.props.match.params.itemKey);
+      this.bindAsArray(ref, 'comments')
+    }
 
-    console.log(this.state.items);
+    submitComment() {
+      this.firebaseRefs['comments'].push({
+        name: this.state.currentName,
+        comment: this.state.currentComment,
+        timestamp: new Date()
+      });
+      this.setState({ // todo: doesn't work, need to bind currentComment to textfield
+        currentComment: ''
+      });
+    }
 
-    return (
-      <div>
-        <List>
-
-        </List>
-        {this.state.items.map(item =>
-          <Link to={"/item/" + item['.key']}>
-            <ListItem
-            primaryText={"Someone wasted " + item.hours + " on " + item.thing}
-            secondaryText={item.description}
-            insetChildren={true}
-            rightAvatar={<Avatar src={"https://randomuser.me/api/portraits/thumb/men/" + Math.floor(Math.random() * 80) + ".jpg"} />}
+    render() {
+      return (
+        <span>
+          <List>
+            {this.state.comments.map(comment =>
+                <ListItem
+                key={comment['.key']}
+                primaryText={comment.name}
+                secondaryText={comment.comment}
+                insetChildren={true}
+                rightAvatar={<Avatar src={"https://randomuser.me/api/portraits/thumb/men/" + Math.floor(Math.random() * 80) + ".jpg"} />}
+                />
+            )}
+          </List>
+          <span>
+            <TextField
+              hintText="Name"
+              onChange={this.handleUpdateInput('name').bind(this)}
             />
-          </Link>
-        )}
-      </div>
-    );
-  }
+            <br />
+            <TextField
+              hintText="Comment"
+              onChange={this.handleUpdateInput('comment').bind(this)}
+            />
+            <br />
+            <RaisedButton label="Submit" primary={true} style={buttonStyle} onClick={this.submitComment.bind(this)} />
+          </span>
+        </span>
+      );
+    }
 }
 
 reactMixin(Item.prototype, ReactFireMixin)

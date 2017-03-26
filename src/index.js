@@ -14,7 +14,7 @@ import firebase from 'firebase'
 
 import Login from "./Login";
 import Item from "./Item";
-import Categories from "./Categories";
+import ItemList from "./ItemList";
 injectTapEventPlugin();
 
 
@@ -32,7 +32,33 @@ var config = {
 };
 
 firebase.initializeApp(config);
-
+firebase.auth().onAuthStateChanged(function(user) {
+  // [START_EXCLUDE silent]
+  // [END_EXCLUDE]
+  if (user) {
+    alert('User signed in');
+    // User is signed in.
+    var displayName = user.displayName;
+    var email = user.email;
+    var emailVerified = user.emailVerified;
+    var photoURL = user.photoURL;
+    var isAnonymous = user.isAnonymous;
+    var uid = user.uid;
+    var providerData = user.providerData;
+    // [START_EXCLUDE]
+    if (!emailVerified) {
+      alert('Email not verified');
+    }
+    // [END_EXCLUDE]
+  } else {
+    // User is signed out.
+    // [START_EXCLUDE]
+    alert('User signed out');
+    // [END_EXCLUDE]
+  }
+  // [START_EXCLUDE silent]
+  // [END_EXCLUDE]
+});
 const style = {
   width: '50%',
   margin: 'auto',
@@ -66,11 +92,10 @@ ReactDOM.render((
           <br />
           <Paper style={style} zDepth={3}>
             <span>
-              <Route path="/" component={Categories} />
+              <Route path="/" exact component={ItemList} />
               <Route path="/login" component={Login} />
-              <Route path="/item/:itemId" component={Item}/>
+              <Route path="/item/:itemKey" component={Item}/>
             </span>
-            <br />
           </Paper>
         </span>
       </Router>

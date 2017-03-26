@@ -80,7 +80,8 @@ class Items extends Component {
     this.firebaseRefs['items'].push({
       hours: this.state.hours,
       thing: this.state.thing,
-      description: ""
+      description: "",
+      timestamp: new Date()
     });
   }
 

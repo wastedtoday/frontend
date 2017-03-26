@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { List, ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import { Link } from 'react-router-dom'
 
-export default class Items extends React.Component {
+class Items extends Component {
 
     constructor(props) {
         super(props);
@@ -27,3 +27,5 @@ export default class Items extends React.Component {
         );*/
     }
 }
+
+export default Items;
