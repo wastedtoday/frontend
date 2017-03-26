@@ -1,6 +1,6 @@
 import React from 'react';
 import Items from './Items.js'
-import {Tabs, Tab} from 'material-ui/Tabs';
+import { Tabs, Tab } from 'material-ui/Tabs';
 
 
 export default class Categories extends React.Component {
@@ -10,8 +10,11 @@ export default class Categories extends React.Component {
         this.state = {categories: []};
 
         fetch(`http://wasted.today/server.api/category/`)
-            .then(result=>result.json())
-            .then(categories=>this.setState({categories}));
+            .then(result => result.json())
+            .then(categories => {
+              console.log(categories);
+              this.setState({categories});
+            });
     }
 
 
