@@ -28,6 +28,55 @@ const buttonStyle = {
   margin: 12,
 };
 
+let userObject = {};
+let isBound = false;
+
+var config = {
+  apiKey: "AIzaSyC0TzUJs3ZRgmUOvgY4I4v2W4_yLrkO7HQ",
+
+  // Only needed if using Firebase Realtime Database (which we will be in this example)
+  databaseURL: "https://wastedtoday-d654f.firebaseio.com",
+
+  // Only needed if using Firebase Authentication
+  authDomain: "wastedtoday-d654f.firebaseapp.com",
+
+  // Only needed if using Firebase Storage
+  storageBucket: "wastedtoday-d654f.appspot.com"
+};
+
+
+firebase.initializeApp(config);
+
+firebase.auth().onAuthStateChanged(function(user) {
+  // [START_EXCLUDE silent]
+  // [END_EXCLUDE]
+  if (user) {
+    userObject = user;
+    console.log(userObject);
+    alert('User signed in');
+    // User is signed in.
+    var displayName = user.displayName;
+    var email = user.email;
+    var emailVerified = user.emailVerified;
+    var photoURL = user.photoURL;
+    var isAnonymous = user.isAnonymous;
+    var uid = user.uid;
+    var providerData = user.providerData;
+    // [START_EXCLUDE]
+    if (!emailVerified) {
+      alert('Email not verified');
+    }
+    // [END_EXCLUDE]
+  } else {
+    // User is signed out.
+    // [START_EXCLUDE]
+    alert('User signed out');
+    // [END_EXCLUDE]
+  }
+  // [START_EXCLUDE silent]
+  // [END_EXCLUDE]
+});
+
 class Items extends Component {
 
   constructor(props, context) {
@@ -44,7 +93,6 @@ class Items extends Component {
 	  const ref = firebase.database().ref("items");
 	  this.bindAsArray(ref, 'items')
 
-	  this.bindAsArray(firebase.database().ref("writeOnly"), 'writeOnly')
     /*
     this.firebaseRefs['items'].push({
       test: "test"
@@ -88,6 +136,14 @@ class Items extends Component {
   }
 
   render() {
+
+    if (!isBound && userObject.uid) {
+      console.log('binding');
+      this.bindAsArray(firebase.database().ref('writeOnly/items/' + userObject.uid), 'writeOnly')
+      isBound = true;
+    }
+
+    console.log(userObject);
     return (
       <div>
         Today I wasted

@@ -12,25 +12,18 @@ admin.initializeApp(functions.config().firebase);
 
 // Moderates messages by lowering all uppercase messages and removing swearwords.
 exports.moderator = functions.database
-	.ref('/writeOnly/{messageId}').onWrite(event => {
+	.ref('/writeOnly/items/{userId}/{messageId}').onWrite(event => {
 		const message = event.data.val();
 
 		if (message) {
-			// Retrieved the message values.
-			console.log('Retrieved message content: ', message);
-
-
 			admin.database().ref('/items').push({
-				test: 'test'
+				hours: message.hours,
+				thing: message.thing,
+				description: message.description,
+				uid: event.params.userId,
+				timestamp: new Date()
 			});
-/*
-			// Update the Firebase DB with checked message.
-			console.log('Message has been moderated. Saving to DB: ', moderatedMessage);
-			return event.data.adminRef.update({
-				text: moderatedMessage,
-				sanitized: true,
-				moderated: message.text !== moderatedMessage
-			});*/
+
+			return event.data.adminRef.remove();
 		}
 	});
-

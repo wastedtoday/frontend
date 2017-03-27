@@ -1,6 +1,34 @@
 {
   "rules": {
     ".read": "auth != null",
-    ".write": "auth != null"
+    ".write": "auth != null",
+    "items": {
+      ".read": "auth != null",
+      ".write": "false",
+    },
+    "comment": {
+      ".read": "auth != null",
+      ".write": "false",
+    },
+    "writeOnly": {
+      ".read": "false",
+      ".write": "auth != null",
+      "items": {
+        ".read": "false",
+        ".write": "auth != null",
+        "$uid": {
+          ".write": "auth.uid === $uid",
+          ".read": "false"
+        }
+      },
+      "comments": {
+        ".read": "false",
+        ".write": "auth != null",
+        "$uid": {
+          ".write": "auth.uid === $uid",
+          ".read": "false"
+        }
+      }
+    }
   }
 }
