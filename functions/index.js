@@ -12,18 +12,26 @@ admin.initializeApp(functions.config().firebase);
 
 // Moderates messages by lowering all uppercase messages and removing swearwords.
 exports.moderator = functions.database
-	.ref('/writeOnly/items/{userId}/{messageId}').onWrite(event => {
+	.ref('/writeOnly/{entity}/{userId}/{messageId}').onWrite(event => {
 		const message = event.data.val();
 
 		if (message) {
-			admin.database().ref('/items').push({
-				hours: message.hours,
-				thing: message.thing,
-				description: message.description,
-				uid: event.params.userId,
-				timestamp: new Date()
-			});
+			if (message.hours && message.thing && message.description) {
+				admin.database().ref('/' + event.params.entity).push({
+					hours: message.hours,
+					thing: message.thing,
+					description: message.description,
+					uid: event.params.userId,
+					timestamp: new Date()
+				});
 
-			return event.data.adminRef.remove();
+				return event.data.adminRef.remove();
+			} else {
+				admin.database().ref('/readOnly/responses/' + event.params.userId).push({
+					error: 'Invalid request, please try again.'
+				});
+
+				return event.data.adminRef.remove();
+			}
 		}
 	});

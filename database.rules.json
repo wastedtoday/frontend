@@ -3,12 +3,12 @@
     ".read": "auth != null",
     ".write": "auth != null",
     "items": {
-      ".read": "auth != null",
-      ".write": "false",
+      ".read": "true",
+      ".write": "false"
     },
     "comment": {
-      ".read": "auth != null",
-      ".write": "false",
+      ".read": "true",
+      ".write": "false"
     },
     "writeOnly": {
       ".read": "false",

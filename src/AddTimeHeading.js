@@ -131,7 +131,7 @@ class Items extends Component {
     this.firebaseRefs['writeOnly'].push({
       hours: this.state.hours,
       thing: this.state.thing,
-      description: ""
+      description: 'test'
     });
   }
 
